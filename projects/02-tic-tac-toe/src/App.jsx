@@ -69,13 +69,13 @@ function App() {
     const newBoard = [...board];
     newBoard[index] = turn;
     setBoard(newBoard);
-
+    // change turn
     setTurn((prev) => (prev === TURNS.X ? TURNS.O : TURNS.X));
-
+    // review winner
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
       // confetti with any library
-      setWinner(newWinner);
+      setWinner(newWinner); //update winner and is asynchronous
     } else if (checkEndGame(newBoard)) {
       setWinner(false);
     }
