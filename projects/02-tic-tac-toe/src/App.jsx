@@ -1,35 +1,9 @@
 import { useState } from "react";
-import "./App.css";
-
-const TURNS = {
-  X: "x",
-  O: "o",
-};
-
-const Square = ({ children, isSelected, updateBoard, index }) => {
-  const className = `square ${isSelected ? "is-selected" : ""}`;
-
-  const handleClick = () => {
-    updateBoard();
-  };
-
-  return (
-    <div className={className} onClick={handleClick}>
-      {children}
-    </div>
-  );
-};
-
-const WINNER_COMBOS = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6],
-];
+import confetti from "canvas-confetti";
+import { Square } from "./components/Square";
+import { TURNS } from "./constants";
+import { checkWinnerFrom } from "./logic/board";
+import { WinnerModal } from "./components/WinnerModal";
 
 function App() {
   // const BOARD_INITIAL = ["x", "x", "x", "O", "O", "O", "x", "O", "x"];
@@ -37,22 +11,6 @@ function App() {
   const [board, setBoard] = useState(BOARD_INITIAL);
   const [turn, setTurn] = useState(TURNS.X);
   const [winner, setWinner] = useState(null); // null: not exist winner, and false: empate
-
-  const checkWinner = (boardToCheck) => {
-    // revisamos todas las combinaciones ganadoras
-    for (const combo of WINNER_COMBOS) {
-      const [a, b, c] = combo;
-      if (
-        boardToCheck[a] &&
-        boardToCheck[a] === boardToCheck[b] &&
-        boardToCheck[a] === boardToCheck[c]
-      ) {
-        return boardToCheck[a];
-      }
-    }
-    //  si no hay ganador
-    return null;
-  };
 
   const resetGame = () => {
     setBoard(BOARD_INITIAL);
@@ -72,9 +30,10 @@ function App() {
     // change turn
     setTurn((prev) => (prev === TURNS.X ? TURNS.O : TURNS.X));
     // review winner
-    const newWinner = checkWinner(newBoard);
+    const newWinner = checkWinnerFrom(newBoard);
     if (newWinner) {
       // confetti with any library
+      confetti();
       setWinner(newWinner); //update winner and is asynchronous
     } else if (checkEndGame(newBoard)) {
       setWinner(false);
@@ -98,19 +57,7 @@ function App() {
         <Square isSelected={turn === TURNS.X}> {TURNS.X}</Square>
         <Square isSelected={turn === TURNS.O}> {TURNS.O}</Square>
       </section>
-      {winner !== null && (
-        <section className="winner">
-          <div className="text">
-            <h2>{winner === false ? "empate" : `winner: `}</h2>
-            <header className="win">
-              {winner && <Square>{winner}</Square>}
-            </header>
-            <footer>
-              <button onClick={resetGame}>Start again</button>
-            </footer>
-          </div>
-        </section>
-      )}
+      <WinnerModal />
     </main>
   );
 }
