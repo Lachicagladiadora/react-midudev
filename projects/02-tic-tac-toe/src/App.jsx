@@ -1,25 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
+
 import { Square } from "./components/Square";
 import { TURNS } from "./constants";
-import { checkWinnerFrom } from "./logic/board";
+import { checkEndGame, checkWinnerFrom } from "./logic/board";
 import { WinnerModal } from "./components/WinnerModal";
+import { resetGameToStorage, saveGameToStorage } from "./logic/storage";
 
 function App() {
   // const BOARD_INITIAL = ["x", "x", "x", "O", "O", "O", "x", "O", "x"];
   const BOARD_INITIAL = Array(9).fill(null);
-  const [board, setBoard] = useState(BOARD_INITIAL);
-  const [turn, setTurn] = useState(TURNS.X);
+
+  const [board, setBoard] = useState(() => {
+    const BOARD_FROM_STORAGE = window.localStorage.getItem("GAME");
+    return BOARD_FROM_STORAGE ? JSON.parse(BOARD_FROM_STORAGE) : BOARD_INITIAL;
+  });
+  const [turn, setTurn] = useState(() => {
+    const TURN_FROM_STORAGE = window.localStorage.getItem("TURN");
+    return TURN_FROM_STORAGE ? JSON.parse(TURN_FROM_STORAGE) : TURNS.X;
+  });
   const [winner, setWinner] = useState(null); // null: not exist winner, and false: empate
 
   const resetGame = () => {
     setBoard(BOARD_INITIAL);
     setTurn(TURNS.X);
     setWinner(null);
-  };
 
-  const checkEndGame = (newBoard) => {
-    return newBoard.every((square) => square !== null);
+    resetGameToStorage();
   };
 
   const updateBoard = (index) => {
@@ -28,17 +35,27 @@ function App() {
     newBoard[index] = turn;
     setBoard(newBoard);
     // change turn
-    setTurn((prev) => (prev === TURNS.X ? TURNS.O : TURNS.X));
+    const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
+    setTurn(newTurn);
+    // save game
+    saveGameToStorage({ newBoard: newBoard, turn: newTurn });
     // review winner
     const newWinner = checkWinnerFrom(newBoard);
     if (newWinner) {
       // confetti with any library
       confetti();
-      setWinner(newWinner); //update winner and is asynchronous
+      setWinner(newWinner); //update winner
     } else if (checkEndGame(newBoard)) {
       setWinner(false);
     }
   };
+
+  useEffect(() => {
+    const newBoard = [...board];
+    const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
+
+    saveGameToStorage({ newBoard: newBoard, turn: newTurn });
+  }, [turn, board]);
 
   return (
     <main className="board">
@@ -57,7 +74,7 @@ function App() {
         <Square isSelected={turn === TURNS.X}> {TURNS.X}</Square>
         <Square isSelected={turn === TURNS.O}> {TURNS.O}</Square>
       </section>
-      <WinnerModal />
+      <WinnerModal resetGame={resetGame} winner={winner} />
     </main>
   );
 }
