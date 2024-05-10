@@ -5,55 +5,45 @@ export const App = () => {
   const [firstWord, setFirstWord] = useState('')
   const [srcImage, setSrcImage] = useState('')
 
-
   const newFact = async () => {
     // fact
     const fact = await fetch('https://catfact.ninja/fact')
     const data = await fact.json()
     const factData = data.fact
     setRandomFact(factData)
-    console.log({ data })
-    console.log({ factData })
     // word
     const words = factData.split(' ')
-    console.log({ words })
     const word = words[0].toLowerCase()
-    console.log({ word })
     setFirstWord(word)
     // image
     const img = await fetch(`https://cataas.com/cat/says/${word}?fontSize=50&fontColor=red`)
-    console.log({ img })
-    // const image = await img.json()
-    // console.log({ image })
     setSrcImage(img.url)
-    // console.log({ srcImage })
   }
 
+  const otherFact = () => {
+    newFact()
+  }
 
   useEffect(() => {
     newFact()
-
   }, [])
-
-
-
 
   return (
     <>
-      <h1>Prueba tecnica</h1>
-      <section>
-        <h2>hecho aleatorio</h2>
-        <p>{randomFact}</p>
-      </section>
-      <section>
-        <h2>first word del hecho aleatorio</h2>
-        <p>{firstWord}</p>
-      </section>
-      <section>
-        <h2>gato con la first word del hecho aleatorio</h2>
-        <p>{srcImage}</p>
-        <img src={srcImage} alt={`image-${firstWord}`} />
-      </section>
+      <h1>Technical test: Cat's app</h1>
+      <div style={{ display: 'flex', gap: '40px' }}>
+        <section>
+          <h2>Random fact</h2>
+          <p>{randomFact}</p>
+          <h2>First word</h2>
+          <p style={{ fontWeight: 'bold' }}>{firstWord}</p>
+          <button onClick={otherFact}>Other fact</button>
+        </section>
+        <section>
+          <h2>Image</h2>
+          <img src={srcImage} alt={`image-${firstWord}`} height={500} />
+        </section>
+      </div>
     </>
   )
 }
