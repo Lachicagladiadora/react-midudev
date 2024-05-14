@@ -1,40 +1,42 @@
-import React, { useEffect, useState } from 'react'
-import { getFact } from './utils'
+import React from 'react'
+// import { getFact } from './utils'
+import { useData } from './useData'
 
 export const App = () => {
-  const [randomFact, setRandomFact] = useState('')
-  const [firstWord, setFirstWord] = useState('')
-  const [urlCatImage, setUrlCatImage] = useState('')
+  // const [randomFact, setRandomFact] = useState('')
+  // const [firstWord, setFirstWord] = useState('')
+  // const [urlCatImage, setUrlCatImage] = useState('')
 
-  // fact
-  const updateFact = async () => {
-    const factData = await getFact()
-    setRandomFact(factData)
-  }
+  // // fact
+  // const updateFact = async () => {
+  //   const factData = await getFact()
+  //   setRandomFact(factData)
+  // }
 
-  const getCatImage = async () => {
-    // word
-    const words = randomFact.split(' ')
-    const word = words[0].toLowerCase()
-    setFirstWord(word)
-    // image
-    const img = await fetch(`https://cataas.com/cat/says/${word}?fontSize=50&fontColor=red`)
-    setUrlCatImage(img.url)
-  }
+  // const getCatImage = async () => {
+  //   // word
+  //   const words = randomFact.split(' ')
+  //   const word = words[0].toLowerCase()
+  //   setFirstWord(word)
+  //   // image
+  //   const img = await fetch(`https://cataas.com/cat/says/${word}?fontSize=50&fontColor=red`)
+  //   setUrlCatImage(img.url)
+  // }
 
-  const getNewFact = () => {
-    updateFact()
-  }
+  // const getNewFact = () => {
+  //   updateFact()
+  // }
 
-  useEffect(() => {
-    if (!randomFact) return
-    getCatImage()
+  // useEffect(() => {
+  //   if (!randomFact) return
+  //   getCatImage()
 
-  }, [randomFact])
+  // }, [randomFact])
 
-  useEffect(() => {
-    updateFact()
-  }, [])
+  // useEffect(() => {
+  //   updateFact()
+  // }, [])
+  const { randomFact, newFact, urlCatImage } = useData()
 
   return (
     <>
@@ -45,7 +47,8 @@ export const App = () => {
           <p>{randomFact}</p>
           <h2>First word</h2>
           <p style={{ fontWeight: 'bold' }}>{firstWord}</p>
-          <button onClick={getNewFact}>Other fact</button>
+          {/* <button onClick={getNewFact}>Other fact</button> */}
+          <p>{newFact}</p>
         </section>
         <section>
           <h2>Image</h2>
