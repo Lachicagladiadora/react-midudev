@@ -3,19 +3,20 @@ import { useData } from './useData'
 
 export const App = () => {
 
-  const { randomFact, urlCatImage } = useData()
+  const { randomFact, getNewFact, urlCatImage } = useData()
 
   console.log({ randomFact })
+  console.log({ getNewFact })
   console.log({ urlCatImage })
 
   return (
     <>
       <h1>Technical test: Cat's app</h1>
       <div style={{ display: 'flex', gap: '40px' }}>
-        <section>
+        <section style={{ width: '200px' }}>
           <h2>Random fact</h2>
           <p>{randomFact}</p>
-          <h2>First word</h2>
+          <button onClick={getNewFact}>Get new fact</button>
         </section>
         <section>
           <h2>Image</h2>

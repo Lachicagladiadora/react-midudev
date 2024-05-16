@@ -34,5 +34,5 @@ export const useData = () => {
     getCatImage()
   }, [randomFact])
 
-  return { randomFact, urlCatImage }
+  return { randomFact, getNewFact, urlCatImage }
 }
