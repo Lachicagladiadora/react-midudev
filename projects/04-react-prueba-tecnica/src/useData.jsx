@@ -12,12 +12,17 @@ export const useData = () => {
   }
 
   const getCatImage = async () => {
-    // word
-    const words = randomFact.split(' ')
-    const word = words[0].toLowerCase()
-    // image
-    const img = await fetch(`https://cataas.com/cat/says/${word}?fontSize=50&fontColor=red`)
-    setUrlCatImage(img.url)
+    try {
+      // word
+      const words = randomFact.split(' ')
+      const word = words[0].toLowerCase()
+      // image
+      const img = await fetch(`https://cataas.com/cat/says/${word}?fontSize=50&fontColor=red`)
+      setUrlCatImage(img.url)
+
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   const getNewFact = async () => {

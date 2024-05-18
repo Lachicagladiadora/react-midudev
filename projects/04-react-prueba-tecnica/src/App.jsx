@@ -2,12 +2,9 @@ import React from 'react'
 import { useData } from './useData'
 
 export const App = () => {
-
   const { randomFact, getNewFact, urlCatImage } = useData()
 
-  console.log({ randomFact })
-  console.log({ getNewFact })
-  console.log({ urlCatImage })
+  console.log({ randomFact }, { getNewFact }, { urlCatImage })
 
   return (
     <>
