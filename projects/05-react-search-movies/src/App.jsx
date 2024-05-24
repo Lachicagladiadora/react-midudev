@@ -1,45 +1,44 @@
 import './App.css'
-import { RESPONSE_NOT_FOUND } from './mocks/notFound'
-import { RESPONSE } from './mocks/response'
+import responseMovies from './mocks/with-results.json'
+import withoutResults from './mocks/no-results.json'
+import { useState } from 'react'
 
 function App() {
-  const [response, setResponse] = useState()
+  const [inputSearch, setInputSearch] = useState('')
+  const movies = responseMovies.Search
+  // const hasMovies = movies.length() > 0
+  const hasMovies = true
+  console.log(movies)
 
-  const existResponse = () => {
-    if (response.length() > 0) {
-      setResponse(RESPONSE.Search)
-      return true
-    } else {
-      setResponse(RESPONSE_NOT_FOUND)
-      return false
-    }
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    console.log({ inputSearch })
   }
 
   return (
     <div>
       <header>
         <h1>Movies searcher</h1>
-        <form >
-          <input type="text" placeholder='The farewell concubine, Your name engraved' />
+        <form onSubmit={(e) => onSubmit(e)}>
+          <input type="text" placeholder='The farewell concubine, Your name engraved' value={inputSearch} onChange={e => setInputSearch(e.target.value)} />
           <button>Search</button>
         </form>
       </header>
       <main>
-        {existResponse() ? (
-          response.map((cur) => (
-            <div key={cur.imdbID}>
-              <h1>{cur.Title}</h1>
-              <img src={cur.Poster} alt={`poster from ${cur.Title}`} />
-              <div>
-                <p>{cur.Type}</p>
+        {hasMovies ? (
+          <ul>
+            {movies.map((cur) => (
+              <li key={cur.imdbID}>
+                <h3>{cur.Title}</h3>
                 <p>{cur.Year}</p>
-              </div>
-            </div>
-          ))
+                <img src={cur.Poster} alt="" />
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p>{response.Error}</p>
+          <p>{withoutResults.Error}</p>
         )}
-
       </main>
     </div>
   )
