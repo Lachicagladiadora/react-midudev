@@ -1,14 +1,13 @@
 import './App.css'
 import responseMovies from './mocks/with-results.json'
-import withoutResults from './mocks/no-results.json'
 import { useState } from 'react'
+import { MoviesList, NotFoundMovie } from './components/MoviesList'
 
 function App() {
   const [inputSearch, setInputSearch] = useState('')
   const movies = responseMovies.Search
   // const hasMovies = movies.length() > 0
   const hasMovies = true
-  console.log(movies)
 
 
   const onSubmit = (e) => {
@@ -16,6 +15,7 @@ function App() {
     console.log({ inputSearch })
   }
 
+  console.log(movies)
   return (
     <div>
       <header>
@@ -27,20 +27,12 @@ function App() {
       </header>
       <main>
         {hasMovies ? (
-          <ul>
-            {movies.map((cur) => (
-              <li key={cur.imdbID}>
-                <h3>{cur.Title}</h3>
-                <p>{cur.Year}</p>
-                <img src={cur.Poster} alt="" />
-              </li>
-            ))}
-          </ul>
+          <MoviesList movies={movies} />
         ) : (
-          <p>{withoutResults.Error}</p>
+          <NotFoundMovie />
         )}
       </main>
-    </div>
+    </div >
   )
 }
 
