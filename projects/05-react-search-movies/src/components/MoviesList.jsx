@@ -1,13 +1,13 @@
 import withoutResults from '../mocks/no-results.json'
 
-export const MoviesList = (movies) => {
+export const MoviesList = ({ movies }) => {
   return (
     <ul>
       {movies.map((cur) => (
-        <li key={cur.imdbID}>
-          <h3>{cur.Title}</h3>
-          <p>{cur.Year}</p>
-          <img src={cur.Poster} alt="" />
+        <li key={cur.id}>
+          <h3>{cur.title}</h3>
+          <p>{cur.year}</p>
+          <img src={cur.poster} alt={`poster from ${cur.title}`} />
         </li>
       ))}
     </ul>
