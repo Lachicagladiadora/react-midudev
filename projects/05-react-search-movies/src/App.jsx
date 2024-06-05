@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { MoviesList } from './components/MoviesList'
 import { useMovies } from './hooks/useMovies'
@@ -10,11 +10,9 @@ function App() {
   const [query, setQuery] = useState('')
   const [error, setError] = useState(null)
 
-  // const inputRef = useRef()
 
   const onSubmit = (e) => {
     e.preventDefault()
-    // const value = inputRef.current.value
     console.log('search')
   }
 
