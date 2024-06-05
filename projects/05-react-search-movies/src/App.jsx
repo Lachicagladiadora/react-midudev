@@ -14,18 +14,19 @@ function App() {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    const value = inputRef.current.value
+    // const value = inputRef.current.value
     console.log('search')
-    console.log({ value })
   }
 
   const onChange = (e) => {
+    const newQuery = e.target.value
+    if (newQuery.startsWith(' ')) return
     setQuery(e.target.value)
   }
 
   useEffect(() => {
     if (query === '') {
-      setError("Don't show void results")
+      setError("Write something for search")
       return
     }
     if (query.match(/^\d+$/)) {
@@ -48,6 +49,7 @@ function App() {
           <input value={query} onChange={onChange} type="text" placeholder='The farewell concubine, Your name engraved' />
           <button>Search</button>
         </form>
+        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       </header>
       <main>
         <MoviesList movies={mappedMovies} />
